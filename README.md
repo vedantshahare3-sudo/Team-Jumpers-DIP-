@@ -1,46 +1,77 @@
+# 🌍 MAST-Net: Air Quality Prediction using Hybrid Deep Learning
 
-This README.md file is designed to accompany your research paper and the provided PyTorch implementation of the MAST-Net framework.
-It bridges the gap between the theoretical concepts in your paper and the actual code execution.
+This project is an implementation of the research paper:
 
-MAST-Net: Multi-Source Air Quality Spatio-Temporal Network
-This repository contains the official SOTA (State-of-the-Art) implementation of the MAST-Net framework,
-as described in the research paper: "Multi-Source Remote Sensing & Hybrid Deep Learning: Implementation of the MAST-Net Framework for Urban Air Quality Prediction."
+**"Air quality prediction using multi-source remote sensing data integration with hybrid deep learning framework"**
 
-📌 Project OverviewMAST-Net is a hybrid deep learning model designed for high-resolution air quality forecasting. 
-It leverages Triple-Satellite fusion (Sentinel-5P, MODIS, Landsat-8) to provide "virtual sensing" in urban areas that lack physical ground monitoring stations.
+It reproduces a simplified version of the proposed **MAST-Net (Multi-Modal Attention-based Spatio-Temporal Network)** using PyTorch.
 
-Key FeaturesParallel Multi-Modal Branching: Four dedicated CNN streams process heterogeneous satellite and ground-truth data separately to prevent "spectral blurring".
-Dynamic Feature Selection (DFS): A Sigmoid-gated layer that adaptively filters out sensor noise and atmospheric interference (e.g., cloud cover).
-Bi-Directional Temporal Memory: Uses Bi-LSTM units to analyze 7-day sequences of environmental data.
-Uncertainty Quantification (UQ): Trained using Gaussian Negative Log-Likelihood (NLL) to provide a mean prediction and a variance-based reliability score.
+---
 
-🛠️ System ArchitectureThe architecture consists of:Spatial Extraction: Parallel CNN branches for Sentinel-5P, MODIS, Landsat-8, and Auxiliary data.
-DFS Gate: A filtering mechanism to prioritize high-quality features.Temporal Core: A 2-layer Bi-LSTM for modeling temporal pollution drift.
-Attention Fusion: An 8-head attention engine to synchronize spatial and temporal features.
-UQ Output: Dual-head output for Mean (prediction) and Variance (uncertainty).
+## 🚀 Overview
 
-🚀 Performance MetricsBased on experimental validation, 
-the implementation achieves:R^2 Score: 0.94 (Near-perfect correlation with ground sensors).
-RMSE Reduction: 31% improvement over the 2023 baseline model.
-Reliability: Full integration of IEEE-standard uncertainty quantification.
+Air pollution forecasting is a complex spatio-temporal problem. This project implements a hybrid deep learning model combining:
 
-Requirements
-Python 3.8+
-PyTorch 2.0+ 
-NumPy
-Matplotlib (for result visualization)
+- CNN (for spatial feature extraction)
+- Bi-LSTM (for temporal dependencies)
+- Multi-head Attention (for feature fusion)
+- Uncertainty Quantification (for prediction reliability)
 
-How to Use
-Initialize the Model: The MASTNet_SOTA class builds the parallel architecture.
-Data Preparation: The generate_sota_data() function simulates the fusion of Sentinel, MODIS, and Landsat inputs.
-Training: The training loop utilizes the Adam Optimizer and NLL Loss to calibrate both accuracy and confidence.
-Visualization: After 10 epochs, a loss curve is generated to demonstrate convergence.
+The model predicts key pollutants:
+- PM2.5
+- PM10
+- NO₂
+- O₃
 
-Citation
-If you use this framework in your research, please cite:
-Multi-Source Remote Sensing & Hybrid Deep Learning: Implementation of the MAST-Net Framework for Urban Air Quality Prediction (2026).
+---
 
-Future Work
-Integration of real-time Traffic Camera feeds.
-Deployment as a mobile application for hyper-local health alerts.
-Expansion to track cross-country pollution drift.
+## 🧠 Architecture (MAST-Net)
+
+The model follows the pipeline described in the paper:
+
+### 1. Multi-Source Feature Extraction
+- 4 parallel CNN branches simulate:
+  - Sentinel-5P
+  - MODIS
+  - Landsat-8
+  - Ground/Auxiliary data
+
+### 2. Dynamic Feature Selection (DFS)
+- Learns which features matter using a gating mechanism
+
+### 3. Temporal Modeling
+- Bi-directional LSTM captures time dependencies (7-day sequence)
+
+### 4. Attention Fusion
+- Multi-head attention (8 heads) integrates features
+
+### 5. Uncertainty Output
+- Outputs:
+  - Mean predictions (4 pollutants)
+  - Log variance (uncertainty)
+
+---
+
+## 📂 Project Structure
+├── mastnet.py # Main model implementation
+├── train.py # Training loop
+├── data_simulator.py # Synthetic data generation
+├── README.md
+
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/your-username/mast-net.git
+cd mast-net
+pip install torch matplotlib numpy
+
+## Run training
+python train.py
+
+## Expected output
+Epoch [1/10] | Loss: X.XXXX
+...
+Epoch [10/10] | Loss: X.XXXX
